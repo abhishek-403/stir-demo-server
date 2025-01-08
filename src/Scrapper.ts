@@ -43,21 +43,15 @@ const PASS = process.env.PASS!;
 export async function loginAndScrape() {
   let options = new chrome.Options();
   let proxy = proxyList[Math.floor(Math.random() * proxyList.length)]; // Pick a random proxy from the list
-  console.log(EMAIL, USERNAME, PASS);
-  
+
+  options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
   // options.addArguments(`--proxy-server=${proxy}`);
-  // options.addArguments("headless");
 
   let driver = await new Builder()
     .forBrowser("chrome")
     .setChromeOptions(options)
     .build();
   try {
-    // Navigate to the authentication URL
-    // await getProxyIP();
-    // const a = await driver.get("https://ipv4.webshare.io/");
-    console.log("ip", proxy);
-
     await driver.get(AUTH_URL);
     await driver.wait(until.urlIs(AUTH_URL), 12000);
     await driver.wait(until.elementLocated(By.className(AUTH_EMAIL)), 10000);
